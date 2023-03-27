@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class TerrainPoint extends Model
+class MountainGroup extends Model
 {
     use HasFactory;
 
-    public function terrainPointAs(): HasMany
+    public function leaders(): HasMany
     {
-        return $this->hasMany("terrain_point_a");
+        return $this->hasMany(User::class);
     }
 
-    public function terrainPointBs(): HasMany
+    public function mountainRanges(): HasMany
     {
-        return $this->hasMany("terrain_point_b");
+        return $this->hasMany(MountainRange::class);
     }
 }
