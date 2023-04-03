@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('badge_awards', function (Blueprint $table) {
+        Schema::create('section_blocked_periods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user")->constrained();
-            $table->foreignId("badge")->constrained();
-            $table->date("grant_date");
-            $table->string("badge_award_status");
-            $table->integer('points_from_previous_badge')->nullable();
+            $table->foreignId('section')->constrained();
+            $table->date("start_time");
+            $table->date('end_time')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('badge_awards');
+        Schema::dropIfExists('section_blocked_periods');
     }
 };

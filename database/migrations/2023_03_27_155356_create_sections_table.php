@@ -22,7 +22,6 @@ return new class extends Migration
             $table->unsignedBigInteger('terrain_point_b');
             $table->foreign('terrain_point_a')->references('id')->on('terrain_points')->onDelete('cascade');
             $table->foreign('terrain_point_b')->references('id')->on('terrain_points')->onDelete('cascade');
-            $table->boolean("blocked")->default("0");
             $table->timestamps();
         });
     }

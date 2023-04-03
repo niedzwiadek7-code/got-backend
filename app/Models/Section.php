@@ -36,4 +36,9 @@ class Section extends Model
         return $this->hasMany(GotBookEntry::class);
     }
 
+    public function blockedPeriods(): HasMany
+    {
+        return $this->hasMany(SectionBlockedPeriod::class);
+    }
+
 }
