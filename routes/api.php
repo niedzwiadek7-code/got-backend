@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MountainRangeController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,4 +36,20 @@ Route::group(['prefix' => 'mountain-groups'], function () {
     Route::get('/{mountainGroup}', [MountainGroupController::class, 'show']);
     Route::put('/{mountainGroup}', [MountainGroupController::class, 'update']);
     Route::delete('/{mountainGroup}', [MountainGroupController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'mountain-ranges'], function () {
+    Route::get('/', [MountainRangeController::class, 'index']);
+    Route::post('/', [MountainRangeController::class, 'store']);
+    Route::get('/{mountainGroup}', [MountainRangeController::class, 'show']);
+    Route::put('/{mountainGroup}', [MountainRangeController::class, 'update']);
+    Route::delete('/{mountainGroup}', [MountainRangeController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'sections'], function () {
+    Route::get('/', [SectionController::class, 'index']);
+    Route::post('/', [SectionController::class, 'store']);
+    Route::get('/{terrainPoint}', [SectionController::class, 'show']);
+    Route::put('/{terrainPoint}', [SectionController::class, 'update']);
+    Route::delete('/{terrainPoint}', [SectionController::class, 'destroy']);
 });
