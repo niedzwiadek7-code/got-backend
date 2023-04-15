@@ -20,6 +20,12 @@ class SectionController extends Controller
     {
         $section = new Section();
         $section->name = $request->input('name');
+        $section->description = $request->input('description');
+        $section->mountain_range = $request->input('mountain_range');
+        $section->terrain_point_a = $request->input('terrain_point_a');
+        $section->terrain_point_b = $request->input('terrain_point_b');
+        $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
+        $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
         $section->save();
         return response()->json($section);
     }
@@ -38,6 +44,12 @@ class SectionController extends Controller
     public function update(Request $request, Section $section)
     {
         $section->name = $request->input('name');
+        $section->description = $request->input('description');
+        $section->mountain_range = $request->input('mountain_range');
+        $section->terrain_point_a = $request->input('terrain_point_a');
+        $section->terrain_point_b = $request->input('terrain_point_b');
+        $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
+        $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
         $section->save();
         return response()->json($section);
     }

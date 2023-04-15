@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Section;
+use App\Models\MountainRange;
 use Illuminate\Http\Request;
 
 class MountainRangeController extends Controller
 {
     public function index()
     {
-        $mountainRanges = Section::all();
+        $mountainRanges = MountainRange::all();
         return response()->json($mountainRanges);
     }
 
@@ -18,8 +18,9 @@ class MountainRangeController extends Controller
      */
     public function store(Request $request)
     {
-        $mountainRange = new Section();
+        $mountainRange = new MountainRange();
         $mountainRange->name = $request->input('name');
+        $mountainRange->mountain_group = $request->input('mountain_group');
         $mountainRange->save();
         return response()->json($mountainRange);
     }
@@ -27,7 +28,7 @@ class MountainRangeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Section $mountainRange)
+    public function show(MountainRange $mountainRange)
     {
         return response()->json($mountainRange);
     }
@@ -35,9 +36,10 @@ class MountainRangeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Section $mountainRange)
+    public function update(Request $request, MountainRange $mountainRange)
     {
         $mountainRange->name = $request->input('name');
+        $mountainRange->mountain_group = $request->input('mountain_group');
         $mountainRange->save();
         return response()->json($mountainRange);
     }
@@ -45,9 +47,9 @@ class MountainRangeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Section $mountainRange)
+    public function destroy(MountainRange $mountainRange)
     {
         $mountainRange->delete();
-        return response()->json(['message' => 'Mountain group deleted']);
+        return response()->json(['message' => 'Mountain range deleted']);
     }
 }
