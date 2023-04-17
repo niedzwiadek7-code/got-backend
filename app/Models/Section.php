@@ -19,12 +19,12 @@ class Section extends Model
 
     public function terrainPointA(): HasOne
     {
-        return $this->hasOne("terrain_point_a");
+        return $this->hasOne(TerrainPoint::class, "id" ,"terrain_point_a_id");
     }
 
     public function terrainPointB(): HasOne
     {
-        return $this->hasOne("terrain_point_b");
+        return $this->hasOne(TerrainPoint::class, "id",  "terrain_point_b_id");
     }
 
     public function tripPlanEntries(): HasMany

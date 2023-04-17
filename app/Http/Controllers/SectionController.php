@@ -62,4 +62,11 @@ class SectionController extends Controller
         $section->delete();
         return response()->json(['message' => 'Section deleted']);
     }
+
+    public function terrainPoints(Section $section) {
+        return [
+            'terrain_point_a' => $section->terrainPointA()->get(),
+            'terrain_point_b' => $section->terrainPointB()->get()
+        ];
+    }
 }

@@ -54,4 +54,5 @@ Route::group(['prefix' => 'sections'], function () {
     Route::get('/{section}', [SectionController::class, 'show']);
     Route::put('/{section}', [SectionController::class, 'update']);
     Route::delete('/{section}', [SectionController::class, 'destroy']);
+    Route::get('/{section}/terrain-points', [SectionController::class, 'terrainPoints']);
 });
