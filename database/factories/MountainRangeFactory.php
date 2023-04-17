@@ -14,7 +14,7 @@ class MountainRangeFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'mountain_group' => MountainGroup::factory()->create(),
+            'mountain_group_id' => $this->faker->numberBetween(1, 7),
         ];
     }
 }
