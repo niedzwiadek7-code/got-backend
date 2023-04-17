@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('users_mountain_groups', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user")->constrained();
-            $table->foreignId("mountain_group")->constrained();
+            $table->foreignId("user_id")->constrained();
+            $table->foreignId("mountain_group_id")->constrained();
             $table->timestamps();
         });
     }

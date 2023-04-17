@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('got_books', function (Blueprint $table) {
             $table->id();
             $table->string("got_book_id");
-            $table->foreignId("user")->constrained();
+            $table->foreignId("user_id")->constrained();
             $table->timestamps();
         });
     }

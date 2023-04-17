@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("description");
-            $table->foreignId("mountain_range")->constrained();
+            $table->foreignId("mountain_range_id")->constrained();
             $table->integer("badge_points_a_to_b");
             $table->integer("badge_points_b_to_a");
-            $table->unsignedBigInteger('terrain_point_a');
-            $table->unsignedBigInteger('terrain_point_b');
-            $table->foreign('terrain_point_a')->references('id')->on('terrain_points')->onDelete('cascade');
-            $table->foreign('terrain_point_b')->references('id')->on('terrain_points')->onDelete('cascade');
+            $table->unsignedBigInteger('terrain_point_a_id');
+            $table->unsignedBigInteger('terrain_point_b_id');
+            $table->foreign('terrain_point_a_id')->references('id')->on('terrain_points')->onDelete('cascade');
+            $table->foreign('terrain_point_b_id')->references('id')->on('terrain_points')->onDelete('cascade');
             $table->timestamps();
         });
     }

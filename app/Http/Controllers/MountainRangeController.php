@@ -20,7 +20,7 @@ class MountainRangeController extends Controller
     {
         $mountainRange = new MountainRange();
         $mountainRange->name = $request->input('name');
-        $mountainRange->mountain_group = $request->input('mountain_group');
+        $mountainRange->mountain_group_id = $request->input('mountain_group_id');
         $mountainRange->save();
         return response()->json($mountainRange);
     }
@@ -39,7 +39,7 @@ class MountainRangeController extends Controller
     public function update(Request $request, MountainRange $mountainRange)
     {
         $mountainRange->name = $request->input('name');
-        $mountainRange->mountain_group = $request->input('mountain_group');
+        $mountainRange->mountain_group_id = $request->input('mountain_group_id');
         $mountainRange->save();
         return response()->json($mountainRange);
     }
@@ -51,5 +51,12 @@ class MountainRangeController extends Controller
     {
         $mountainRange->delete();
         return response()->json(['message' => 'Mountain range deleted']);
+    }
+
+    /**
+     * Get Terrain points for specific mountain range.
+     */
+    public function sections(MountainRange $mountainRange) {
+        return $mountainRange->sections()->get();
     }
 }

@@ -44,6 +44,7 @@ Route::group(['prefix' => 'mountain-ranges'], function () {
     Route::get('/{mountainRange}', [MountainRangeController::class, 'show']);
     Route::put('/{mountainRange}', [MountainRangeController::class, 'update']);
     Route::delete('/{mountainRange}', [MountainRangeController::class, 'destroy']);
+    Route::get('/{mountainRange}/sections', [MountainRangeController::class, 'sections']);
 });
 
 Route::group(['prefix' => 'sections'], function () {

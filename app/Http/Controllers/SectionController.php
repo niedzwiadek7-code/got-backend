@@ -21,9 +21,9 @@ class SectionController extends Controller
         $section = new Section();
         $section->name = $request->input('name');
         $section->description = $request->input('description');
-        $section->mountain_range = $request->input('mountain_range');
-        $section->terrain_point_a = $request->input('terrain_point_a');
-        $section->terrain_point_b = $request->input('terrain_point_b');
+        $section->mountain_range_id = $request->input('mountain_range_id');
+        $section->terrain_point_a_id = $request->input('terrain_point_a_id');
+        $section->terrain_point_b_id = $request->input('terrain_point_b_id');
         $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
         $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
         $section->save();
@@ -45,9 +45,9 @@ class SectionController extends Controller
     {
         $section->name = $request->input('name');
         $section->description = $request->input('description');
-        $section->mountain_range = $request->input('mountain_range');
-        $section->terrain_point_a = $request->input('terrain_point_a');
-        $section->terrain_point_b = $request->input('terrain_point_b');
+        $section->mountain_range_id = $request->input('mountain_range_id');
+        $section->terrain_point_a_id = $request->input('terrain_point_a');
+        $section->terrain_point_b_id = $request->input('terrain_point_b');
         $section->badge_points_a_to_b = $request->input('badge_points_a_to_b');
         $section->badge_points_b_to_a = $request->input('badge_points_b_to_a');
         $section->save();

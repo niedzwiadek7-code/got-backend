@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mountain_ranges', function (Blueprint $table) {
             $table->id();
             $table->string("name")->nullable(false);
-            $table->foreignId("mountain_group")->constrained();
+            $table->foreignId("mountain_group_id")->constrained();
             $table->timestamps();
         });
     }

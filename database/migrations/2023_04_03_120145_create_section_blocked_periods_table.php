@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('section_blocked_periods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('section')->constrained();
+            $table->foreignId('section_id')->constrained();
             $table->date("start_time");
             $table->date('end_time')->nullable();
             $table->timestamps();

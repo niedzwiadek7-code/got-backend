@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('section_report', function (Blueprint $table) {
             $table->id();
             $table->string("content");
-            $table->foreignId("section")->constrained();
-            $table->foreignId("user")->constrained();
+            $table->foreignId("section_id")->constrained();
+            $table->foreignId("user_id")->constrained();
             $table->timestamps();
         });
     }
