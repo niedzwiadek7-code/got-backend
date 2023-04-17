@@ -264,7 +264,7 @@ class DatabaseSeeder extends Seeder
             "mountain_group_id" => 6,
         ]);
 
-            //Góry Świętokrzyskie
+            //Słowacja
         \App\Models\MountainRange::factory()->create([
             'name' => 'Słowacki Raj',
             "mountain_group_id" => 7,
