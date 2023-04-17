@@ -54,4 +54,11 @@ class MountainGroupController extends Controller
         $mountainGroup->delete();
         return response()->json(['message' => 'Mountain group deleted']);
     }
+
+    /**
+     * Get mountain ranges for specific mountain group.
+     */
+    public function mountainRanges(MountainGroup $mountainGroup) {
+        return $mountainGroup->mountainRanges()->get();
+    }
 }
