@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('got_books', function (Blueprint $table) {
+        Schema::create('section_blocked_periods', function (Blueprint $table) {
             $table->id();
-            $table->string("got_book_id");
-            $table->foreignId("user_id")->constrained();
+            $table->foreignId('section_id')->constrained();
+            $table->date("start_time");
+            $table->date('end_time')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('got_books');
+        Schema::dropIfExists('section_blocked_periods');
     }
 };

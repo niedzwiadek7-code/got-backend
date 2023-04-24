@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('trip_plan_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("trip_plan")->constrained();
-            $table->foreignId("section")->constrained();
+            $table->foreignId("trip_plan_id")->constrained();
+            $table->foreignId("section_id")->constrained();
             $table->date("trip_date");
             $table->string("status");
             $table->boolean("b_to_a");

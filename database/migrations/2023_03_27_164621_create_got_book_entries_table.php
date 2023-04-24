@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('got_book_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("got_book")->constrained();
-            $table->foreignId("section")->constrained();
+            $table->foreignId("got_book_id")->constrained();
+            $table->foreignId("section_id")->constrained();
             $table->date("trip_date");
-            $table->foreignId("badge_award")->constrained();
+            $table->foreignId("badge_award_id")->constrained();
             $table->string("status");
             $table->boolean("b_to_a");
-            $table->foreignId("trip_plan_entry")->nullable()->constrained();
+            $table->foreignId("trip_plan_entry_id")->nullable()->constrained();
             $table->timestamps();
         });
     }
