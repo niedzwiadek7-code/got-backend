@@ -33,6 +33,7 @@ Route::group(['prefix' => 'terrain-points'], function () {
 Route::group(['prefix' => 'mountain-groups'], function () {
     Route::get('/', [MountainGroupController::class, 'index']);
     Route::post('/', [MountainGroupController::class, 'store']);
+    Route::get('/with-ranges', [MountainGroupController::class, 'mountainGroupsWithMountainRanges']);
     Route::get('/{mountainGroup}', [MountainGroupController::class, 'show']);
     Route::put('/{mountainGroup}', [MountainGroupController::class, 'update']);
     Route::delete('/{mountainGroup}', [MountainGroupController::class, 'destroy']);
