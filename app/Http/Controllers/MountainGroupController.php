@@ -61,4 +61,13 @@ class MountainGroupController extends Controller
     public function mountainRanges(MountainGroup $mountainGroup) {
         return $mountainGroup->mountainRanges()->get();
     }
+
+
+    /**
+     * Get all mountain groups with mountain ranges.
+     */
+    public function mountainGroupsWithMountainRanges() {
+        $mountainGroups = MountainGroup::with('mountainRanges')->get();
+        return response()->json($mountainGroups);
+    }
 }
