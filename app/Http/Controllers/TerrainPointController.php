@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MountainGroup;
+use App\Models\Section;
 use App\Models\TerrainPoint;
 use Illuminate\Http\Request;
+use App\Models\MountainGroup;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class TerrainPointController extends Controller
 {
@@ -23,12 +25,19 @@ class TerrainPointController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/',
+            'sea_level_height' => 'required|numeric',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+    
         $terrainPoint = new TerrainPoint();
-        $terrainPoint->name = $request->input('name');
+        $terrainPoint->name = $validatedData['name'];
         $terrainPoint->description = $request->input('description');
-        $terrainPoint->sea_level_height = $request->input('sea_level_height');
-        $terrainPoint->latitude = $request->input('latitude');
-        $terrainPoint->longitude = $request->input('longitude');
+        $terrainPoint->sea_level_height = $validatedData['sea_level_height'];
+        $terrainPoint->latitude = $validatedData['latitude'];
+        $terrainPoint->longitude = $validatedData['longitude'];
         $terrainPoint->save();
         return response()->json($terrainPoint);
     }
@@ -46,11 +55,18 @@ class TerrainPointController extends Controller
      */
     public function update(Request $request, TerrainPoint $terrainPoint)
     {
-        $terrainPoint->name = $request->input('name');
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/',
+            'sea_level_height' => 'required|numeric',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+    
+        $terrainPoint->name = $validatedData['name'];
         $terrainPoint->description = $request->input('description');
-        $terrainPoint->sea_level_height = $request->input('sea_level_height');
-        $terrainPoint->latitude = $request->input('latitude');
-        $terrainPoint->longitude = $request->input('longitude');
+        $terrainPoint->sea_level_height = $validatedData['sea_level_height'];
+        $terrainPoint->latitude = $validatedData['latitude'];
+        $terrainPoint->longitude = $validatedData['longitude'];
         $terrainPoint->save();
         return response()->json($terrainPoint);
     }
@@ -60,8 +76,32 @@ class TerrainPointController extends Controller
      */
     public function destroy(TerrainPoint $terrainPoint)
     {
-        $terrainPoint->delete();
-        return response()->json(['message' => 'Terrain point deleted']);
+        // Sprawdzamy, czy któryś z punktów terenu A lub B sekcji odcinka zawiera punkt o danym ID
+        $sections = $terrainPoint->terrainPointAs->merge($terrainPoint->terrainPointBs);
+        $containsPoint = $sections->contains(function ($section) use ($terrainPoint) {
+            return $section->terrainPointAs && $section->terrainPointBs && ($section->terrainPointAs->contains($terrainPoint) || $section->terrainPointBs->contains($terrainPoint));
+        });
+        
+        if ($containsPoint) 
+        {
+            $this->deleteTerrainPointAndSection($terrainPoint->id);
+        } 
+        else 
+        {
+            $terrainPoint->delete();
+        }
+        return response()->json(['message' => 'Terrain point deleted successfully']);
+    }
+
+    private function deleteTerrainPointAndSection(int $terrainPointId)
+    {
+        DB::transaction(function () use ($terrainPointId) 
+        {
+            $terrainPoint = TerrainPoint::findOrFail($terrainPointId);
+            $sections = $terrainPoint->terrainPointAs->merge($terrainPoint->terrainPointBs)->map(fn ($section) => $section->id)->toArray();
+            Section::whereIn('id', $sections)->delete();
+            $terrainPoint->delete();
+        });
     }
 }
 
