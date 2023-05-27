@@ -72,5 +72,30 @@ class User extends Authenticatable
         return $this->hasMany(Badge::class);
     }
 
+    public function usersMountainGroups()
+    {
+        return $this->hasMany(UserMountainGroup::class);
+    }
 
+    // Role użytkowników (relacje)
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function assignRole(Role $role)
+    {
+        $this->roles()->attach($role);
+    }
+
+    public function revokeRole(Role $role)
+    {
+        $this->roles()->detach($role);
+    }
+
+    public function hasRole(string $roleName)
+    {
+        return $this->roles()->where('name', $roleName)->exists();
+    }
 }
