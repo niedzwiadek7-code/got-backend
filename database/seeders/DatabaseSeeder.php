@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
+use App\Models\User;
+use App\Models\MountainGroup;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -628,6 +631,74 @@ class DatabaseSeeder extends Seeder
             "badge_points_b_to_a" => 0,
             "terrain_point_a_id" => 11,
             "terrain_point_b_id" => 9,
-        ]);   
+        ]);
+        //---------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------
+        // Tworzenie użytkowników
+        //-------------------------------------------------
+
+        // Stworzenie siedmiu użytkowników za pomocą factory
+        $users = User::factory(7)->create();
+
+        //-------------------------------------------------
+        // Tworzenie ról użytkowników i uprawnień
+        //-------------------------------------------------
+        $roles = [
+            ['name' => 'Uprawnienia - TATRY I PODTATRZE', 'tatra_podtatrze' => true,],
+            ['name' => 'Uprawnienia - TATRY SŁOWACKIE - Tatry Zachodnie, Wysokie i Bielskie', 'tatra_slowackie' => true,],
+            ['name' => 'Uprawnienia - BESKIDY ZACHODNIE', 'beskidy_zachodnie' => true,],
+            ['name' => 'Uprawnienia - BESKIDY WSCHODNIE', 'beskidy_wschodnie' => true,],
+            ['name' => 'Uprawnienia - GÓRY ŚWIĘTOKRZYSKIE', 'gory_swietokrzyskie' => true,],
+            ['name' => 'Uprawnienia - SUDETY', 'sudety' => true,],
+            ['name' => 'Uprawnienia - Słowacja', 'słowacja' => true,],
+        ];
+
+        // Tworzenie ról
+        foreach ($roles as $roleData) {
+            $roleData['created_at'] = now()->toDateTimeString();
+            $roleData['updated_at'] = now()->toDateTimeString();
+            Role::create($roleData);
+        }
+
+        // Przypisanie ról do użytkowników
+        foreach ($users as $index => $user) {
+            // Sprawdzenie, czy istnieje odpowiednia liczba ról
+            if (isset($roles[$index])) {
+                // Przypisanie do użytkownika
+                $role = Role::where('name', $roles[$index]['name'])->first();
+                $user->roles()->attach($role->id, [
+                    'created_at' => now()->toDateTimeString(),
+                    'updated_at' => now()->toDateTimeString()
+                ]);
+            }
+        }
+        //---------------------------------------------------------------------------------------------------------
+         // Sprawdzanie uprawnień i przypisywanie grup górskich do użytkowników na ich podstawie
+         foreach ($users as $index => $user) {
+            $role = $roles[$index] ?? null;
+        
+            if ($role) {
+                if (isset($role['tatra_podtatrze']) && $role['tatra_podtatrze']) {
+                    $mountainGroup = MountainGroup::where('name', 'TATRY I PODTATRZE')->first();
+                } elseif (isset($role['tatra_slowackie']) && $role['tatra_slowackie']) {
+                    $mountainGroup = MountainGroup::where('name', 'TATRY SŁOWACKIE - Tatry Zachodnie, Wysokie i Bielskie')->first();
+                } elseif (isset($role['beskidy_zachodnie']) && $role['beskidy_zachodnie']) {
+                    $mountainGroup = MountainGroup::where('name', 'BESKIDY ZACHODNIE')->first();
+                } elseif (isset($role['beskidy_wschodnie']) && $role['beskidy_wschodnie']) {
+                    $mountainGroup = MountainGroup::where('name', 'BESKIDY WSCHODNIE')->first();
+                } elseif (isset($role['gory_swietokrzyskie']) && $role['gory_swietokrzyskie']) {
+                    $mountainGroup = MountainGroup::where('name', 'GÓRY ŚWIĘTOKRZYSKIE')->first();
+                } elseif (isset($role['sudety']) && $role['sudety']) {
+                    $mountainGroup = MountainGroup::where('name', 'SUDETY')->first();
+                } elseif (isset($role['słowacja']) && $role['słowacja']) {
+                    $mountainGroup = MountainGroup::where('name', 'Słowacja')->first();
+                }
+                // Dodanie warunku dla pozostałych(nowych) grup górskich
+        
+                if ($mountainGroup) {
+                    $user->usersMountainGroups()->create(['mountain_group_id' => $mountainGroup->id]);
+                }
+            }
+        }
     }
 }
