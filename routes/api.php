@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TerrainPointController;
 use App\Http\Controllers\MountainGroupController;
@@ -30,6 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    // Dodane endpointy dla UserController
+    Route::post('/user/assign-role', [UserController::class, 'assignRole']);
+    Route::post('/user/remove-role', [UserController::class, 'removeRole']);
 
     Route::group(['prefix' => 'terrain-points'], function () {
         Route::get('/', [TerrainPointController::class, 'index']);
@@ -66,4 +72,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{section}', [SectionController::class, 'destroy']);
         Route::get('/{section}/terrain-points', [SectionController::class, 'terrainPoints']);
     });
+
+    // Dodane endpointy dla RoleController
+    Route::post('/roles', [RoleController::class, 'createRole']);
+    Route::get('/roles', [RoleController::class, 'showRoles']);
+    Route::put('/roles/{role}', [RoleController::class, 'updateRole']);
+    Route::delete('/roles/{role}', [RoleController::class, 'deleteRole']);
 });
