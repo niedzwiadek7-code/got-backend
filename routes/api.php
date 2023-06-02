@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TripPlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -65,6 +66,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{section}', [SectionController::class, 'update']);
         Route::delete('/{section}', [SectionController::class, 'destroy']);
         Route::get('/{section}/terrain-points', [SectionController::class, 'terrainPoints']);
+    });
+
+    // Trip plan endpoints
+    Route::group(['prefix' => 'plans'], function () {
+        Route::get('/', [TripPlanController::class, 'index']);
+        Route::post('/', [TripPlanController::class, 'store']);
+        Route::get('/{tripPlan}', [TripPlanController::class, 'show']);
+        Route::put('/{tripPlan}', [TripPlanController::class, 'update']);
+        Route::delete('/{tripPlan}', [TripPlanController::class, 'destroy']);
     });
 
     // Role Controller endpoints
