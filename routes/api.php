@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -11,16 +10,6 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\TerrainPointController;
 use App\Http\Controllers\MountainGroupController;
 use App\Http\Controllers\MountainRangeController;
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
@@ -33,10 +22,11 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    // Dodane endpointy dla UserController
+    // User Controller endpoints
     Route::post('/user/assign-role', [UserController::class, 'assignRole']);
     Route::post('/user/remove-role', [UserController::class, 'removeRole']);
 
+    // Terrain Point endpoints
     Route::group(['prefix' => 'terrain-points'], function () {
         Route::get('/', [TerrainPointController::class, 'index']);
         Route::post('/', [TerrainPointController::class, 'store']);
@@ -45,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{terrainPoint}', [TerrainPointController::class, 'destroy']);
     });
 
+    // Mountain Group endpoints
     Route::group(['prefix' => 'mountain-groups'], function () {
         Route::get('/', [MountainGroupController::class, 'index']);
         Route::post('/', [MountainGroupController::class, 'store']);
@@ -55,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{mountainGroup}/mountain-ranges', [MountainGroupController::class, 'mountainRanges']);
     });
 
+    // Mountain Range endpoints
     Route::group(['prefix' => 'mountain-ranges'], function () {
         Route::get('/', [MountainRangeController::class, 'index']);
         Route::post('/', [MountainRangeController::class, 'store']);
@@ -64,16 +56,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{mountainRange}/sections', [MountainRangeController::class, 'sections']);
     });
 
+    // Section endpoints
     Route::group(['prefix' => 'sections'], function () {
         Route::get('/', [SectionController::class, 'index']);
         Route::post('/', [SectionController::class, 'store']);
+        Route::get('/mountain-range/{mountainRange}/{terrainPoint?}', [SectionController::class, 'getSectionsForTripPlanning']);
         Route::get('/{section}', [SectionController::class, 'show']);
         Route::put('/{section}', [SectionController::class, 'update']);
         Route::delete('/{section}', [SectionController::class, 'destroy']);
         Route::get('/{section}/terrain-points', [SectionController::class, 'terrainPoints']);
     });
 
-    // Dodane endpointy dla RoleController
+    // Role Controller endpoints
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::get('/roles', [RoleController::class, 'showRoles']);
     Route::put('/roles/{role}', [RoleController::class, 'updateRole']);
