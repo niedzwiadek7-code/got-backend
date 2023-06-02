@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId("trip_plan_id")->constrained();
             $table->foreignId("section_id")->constrained();
             $table->date("trip_date");
-            $table->string("status");
+            $table->string("status")->default("CREATED");
             $table->boolean("b_to_a");
             $table->timestamps();
         });

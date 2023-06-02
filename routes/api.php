@@ -75,6 +75,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{tripPlan}', [TripPlanController::class, 'show']);
         Route::put('/{tripPlan}', [TripPlanController::class, 'update']);
         Route::delete('/{tripPlan}', [TripPlanController::class, 'destroy']);
+        Route::post('/entries', [TripPlanController::class, 'putEntry']);
+        Route::delete('/entries/{tripPlanEntry}', [TripPlanController::class, 'deleteEntry']);
     });
 
     // Role Controller endpoints

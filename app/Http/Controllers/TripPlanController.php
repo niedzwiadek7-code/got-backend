@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Section;
 use App\Models\TripPlan;
+use App\Models\TripPlanEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,5 +70,23 @@ class TripPlanController extends Controller
     {
         $tripPlan->delete();
         return response()->json(['message' => 'Trip plan deleted']);
+    }
+
+    public function putEntry(Request $request) {
+        $tripPlanEntry = new TripPlanEntry();
+        $tripPlanEntry->trip_plan_id = $request->input('trip_plan_id');
+        $tripPlanEntry->section_id = $request->input('section_id');
+        $tripPlanEntry->trip_date = $request->input('trip_date');
+        $tripPlanEntry->b_to_a = $request->input('b_to_a');
+
+        $tripPlanEntry->save();
+
+        return response()->json($tripPlanEntry);
+    }
+
+    public function deleteEntry(TripPlanEntry $tripPlanEntry) {
+        $tripPlanEntry->delete();
+
+        return response()->json(['message' => 'Entry deleted']);
     }
 }
