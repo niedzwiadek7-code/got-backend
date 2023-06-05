@@ -15,7 +15,8 @@ class TripPlanController extends Controller
      */
     public function index()
     {
-        $tripPlans = TripPlan::all()->where('user_id', '=', Auth::user()->id);
+        $tripPlans = TripPlan::with('tripPlanEntries')
+            ->where('user_id', '=', Auth::user()->id)->get();
         return response()->json($tripPlans);
     }
 
@@ -88,5 +89,72 @@ class TripPlanController extends Controller
         $tripPlanEntry->delete();
 
         return response()->json(['message' => 'Entry deleted']);
+    }
+
+    public function storeWithEntries(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/'
+        ]);
+
+        $tripPlan = new TripPlan();
+        $tripPlan->name = $validatedData['name'];
+        $tripPlan->description = $request->description;
+        $tripPlan->user_id = Auth::user()->id;
+
+        $tripPlan->save();
+
+        $tripPlanEntries = $request->trip_plan_entries;
+
+        foreach($tripPlanEntries as $entry) {
+            $savedEntryModel = new TripPlanEntry();
+            $savedEntryModel->trip_plan_id = $tripPlan->id;
+            $savedEntryModel->section_id = $entry['section_id'];
+            $savedEntryModel->trip_date = $entry['trip_date'];
+            $savedEntryModel->b_to_a = $entry['b_to_a'];
+
+            $tripPlan->tripPlanEntries()->save($savedEntryModel);
+        }
+
+        // Return JSON response with TripPlan and its TripPlanEntries
+        $tripPlan->load('tripPlanEntries');
+        return response()->json($tripPlan);
+    }
+
+    public function updateWithEntries(Request $request, TripPlan $tripPlan)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|regex:/[a-zA-Z]+/',
+            'trip_plan_entries' => 'required|array',
+            'trip_plan_entries.*.section_id' => 'required',
+            'trip_plan_entries.*.trip_date' => 'required',
+            'trip_plan_entries.*.b_to_a' => 'required',
+        ]);
+
+        $tripPlan->name = $validatedData['name'];
+        $tripPlan->description = $request->description;
+        $tripPlan->user_id = Auth::user()->id;
+
+        $tripPlan->save();
+
+        // Delete previously existing TripPlanEntry models
+        $tripPlan->tripPlanEntries()->delete();
+
+        // Create and save new TripPlanEntry models
+        $tripPlanEntries = $validatedData['trip_plan_entries'];
+
+        foreach ($tripPlanEntries as $entry) {
+            $savedEntryModel = new TripPlanEntry();
+
+            $savedEntryModel->section_id = $entry['section_id'];
+            $savedEntryModel->trip_date = $entry['trip_date'];
+            $savedEntryModel->b_to_a = $entry['b_to_a'];
+
+            $tripPlan->tripPlanEntries()->save($savedEntryModel);
+        }
+
+        // Return JSON response with TripPlan and its TripPlanEntries
+        $tripPlan->load('tripPlanEntries');
+        return response()->json($tripPlan);
     }
 }
