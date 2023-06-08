@@ -15,9 +15,9 @@ class TripPlanController extends Controller
      */
     public function index()
     {
-        $tripPlans = TripPlan::with('tripPlanEntries')
-            ->where('user_id', '=', Auth::user()->id)->get();
-        return response()->json($tripPlans);
+        return TripPlan::query()
+            ->with(['tripPlanEntries', 'tripPlanEntries.section'])
+            ->get();
     }
 
     /**
@@ -111,6 +111,7 @@ class TripPlanController extends Controller
             $savedEntryModel->trip_plan_id = $tripPlan->id;
             $savedEntryModel->section_id = $entry['section_id'];
             $savedEntryModel->trip_date = $entry['trip_date'];
+            $savedEntryModel->status = 'PLANNED';
             $savedEntryModel->b_to_a = $entry['b_to_a'];
 
             $tripPlan->tripPlanEntries()->save($savedEntryModel);

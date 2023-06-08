@@ -27,9 +27,9 @@ class Section extends Model
         return $this->hasOne(TerrainPoint::class, "id",  "terrain_point_b_id");
     }
 
-    public function tripPlanEntries(): HasMany
+    public function tripPlanEntries(): HasOne
     {
-        return $this->hasMany(TripPlanEntry::class);
+        return $this->hasOne(TripPlanEntry::class);
     }
 
     public function gotBookEntries(): HasMany
