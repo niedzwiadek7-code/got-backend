@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/remove-role', [UserController::class, 'removeRole']);
     Route::post('/user/assign-mountain-group', [UserController::class, 'assignLeaderPermission']);
     Route::post('/user/revoke-mountain-group', [UserController::class, 'revokeLeaderPermission']);
+    Route::get('/users/with-role', [UserController::class, 'getUsersWithRole']);
 
     // Terrain Point endpoints
     Route::group(['prefix' => 'terrain-points'], function () {

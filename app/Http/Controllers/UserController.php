@@ -9,6 +9,15 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function getUsersWithRole(Request $request) {
+        $role = $request->input('role');
+        $users = User::whereHas('roles', function ($query) use ($role) {
+            $query->where('name', $role);
+        })->get();
+
+        return response()->json($users);
+    }
+
     public function assignLeaderPermission(Request $request) {
         $mountainGroupId = $request->input('mountain_group_id');
         $userId = $request->input('user_id');
