@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string("first_name");
             $table->string("last_name");
             $table->boolean("disabled")->default("0");
-            $table->string("legitimation_number");
+            $table->string("legitimation_number")->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

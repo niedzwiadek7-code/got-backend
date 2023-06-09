@@ -68,8 +68,10 @@ class AuthController extends Controller
 
         $token = auth()->user()->createToken('authToken')->plainTextToken;
 
+        $userData = User::with('roles')->where('id', '=', Auth::user()->id)->get()->first();
+
         return response()->json([
-            'user' => auth()->user(),
+            'user' => $userData,
             'token' => $token
         ]);
     }
