@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users_mountain_groups', function (Blueprint $table) {
+        Schema::create('mountain_group_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id")->constrained();
             $table->foreignId("mountain_group_id")->constrained();
+            $table->date('assignment_date');
             $table->timestamps();
         });
     }

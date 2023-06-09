@@ -18,23 +18,7 @@ class RoleController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|unique:roles',
-            'tatra_podtatrze' => 'boolean',
-            'tatra_slowackie' => 'boolean',
-            'beskidy_zachodnie' => 'boolean',
-            'beskidy_wschodnie' => 'boolean',
-            'gory_swietokrzyskie' => 'boolean',
-            'sudety' => 'boolean',
-            'słowacja' => 'boolean',
         ]);
-
-        // Konwertuj wartości pól boolean do typu bool
-        $validatedData['tatra_podtatrze'] = (bool) $validatedData['tatra_podtatrze'];
-        $validatedData['tatra_slowackie'] = (bool) $validatedData['tatra_slowackie'];
-        $validatedData['beskidy_zachodnie'] = (bool) $validatedData['beskidy_zachodnie'];
-        $validatedData['beskidy_wschodnie'] = (bool) $validatedData['beskidy_wschodnie'];
-        $validatedData['gory_swietokrzyskie'] = (bool) $validatedData['gory_swietokrzyskie'];
-        $validatedData['sudety'] = (bool) $validatedData['sudety'];
-        $validatedData['słowacja'] = (bool) $validatedData['słowacja'];
 
         $role = Role::create($validatedData);
 
@@ -51,7 +35,7 @@ class RoleController extends Controller
     {
         $roles = Role::all();
 
-    return response(['roles' => $roles], 200);
+        return response(['roles' => $roles], 200);
     }
 
     /**
@@ -67,23 +51,7 @@ class RoleController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|unique:roles,name,'.$role->id,
-            'tatra_podtatrze' => 'boolean',
-            'tatra_slowackie' => 'boolean',
-            'beskidy_zachodnie' => 'boolean',
-            'beskidy_wschodnie' => 'boolean',
-            'gory_swietokrzyskie' => 'boolean',
-            'sudety' => 'boolean',
-            'słowacja' => 'boolean',
         ]);
-
-         // Konwertuj wartości pól boolean do typu bool
-        $validatedData['tatra_podtatrze'] = (bool) $validatedData['tatra_podtatrze'];
-        $validatedData['tatra_slowackie'] = (bool) $validatedData['tatra_slowackie'];
-        $validatedData['beskidy_zachodnie'] = (bool) $validatedData['beskidy_zachodnie'];
-        $validatedData['beskidy_wschodnie'] = (bool) $validatedData['beskidy_wschodnie'];
-        $validatedData['gory_swietokrzyskie'] = (bool) $validatedData['gory_swietokrzyskie'];
-        $validatedData['sudety'] = (bool) $validatedData['sudety'];
-        $validatedData['słowacja'] = (bool) $validatedData['słowacja'];
 
         $role->update($validatedData);
 

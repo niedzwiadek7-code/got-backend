@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\MountainGroup;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,37 +22,37 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        
-        //-------------------------------------------------       
+
+        //-------------------------------------------------
         //Grupy górskie
-        //------------------------------------------------- 
-        \App\Models\MountainGroup::factory()->create([
+        //-------------------------------------------------
+        $tatryIpodtatrze = MountainGroup::factory()->create([
             'name' => 'TATRY I PODTATRZE',
         ]);
-        \App\Models\MountainGroup::factory()->create([
-                    'name' => 'TATRY SŁOWACKIE - Tatry Zachodnie, Wysokie i Bielskie',
-            ]);
-        \App\Models\MountainGroup::factory()->create([
-                    'name' => 'BESKIDY ZACHODNIE',
-            ]);  
-        \App\Models\MountainGroup::factory()->create([
-                    'name' => 'BESKIDY WSCHODNIE',
-            ]);
-        \App\Models\MountainGroup::factory()->create([
-                    'name' => 'GÓRY ŚWIĘTOKRZYSKIE',
-            ]);
-        \App\Models\MountainGroup::factory()->create([
-                    'name' => 'SUDETY',
-            ]);       
-        \App\Models\MountainGroup::factory()->create([
-                    'name' => 'Słowacja',
-            ]);  
+        $tatrySlowackie = MountainGroup::factory()->create([
+            'name' => 'TATRY SŁOWACKIE - Tatry Zachodnie, Wysokie i Bielskie',
+        ]);
+        $bezkidyZachodnie = MountainGroup::factory()->create([
+            'name' => 'BESKIDY ZACHODNIE',
+        ]);
+        $bezkidyWschodnie = MountainGroup::factory()->create([
+            'name' => 'BESKIDY WSCHODNIE',
+        ]);
+        $gorySwietokrzyskie = MountainGroup::factory()->create([
+            'name' => 'GÓRY ŚWIĘTOKRZYSKIE',
+        ]);
+        $sudety = MountainGroup::factory()->create([
+            'name' => 'SUDETY',
+        ]);
+        $slowacja = MountainGroup::factory()->create([
+            'name' => 'Słowacja',
+        ]);
 
-        //-------------------------------------------------       
+        //-------------------------------------------------
         //Pasma górskie
-        //------------------------------------------------- 
+        //-------------------------------------------------
 
-            //Tatry i Podtatrza
+        //Tatry i Podtatrza
         \App\Models\MountainRange::factory()->create([
             'name' => 'Tatry Wysokie',
             "mountain_group_id" => 1,
@@ -67,7 +66,7 @@ class DatabaseSeeder extends Seeder
             "mountain_group_id" => 1,
         ]);
 
-            //Tatry Słowackie
+        //Tatry Słowackie
         \App\Models\MountainRange::factory()->create([
             'name' => 'Zapadne Tatry - (Tatry Zachodnie - Słowacja)',
             "mountain_group_id" => 2,
@@ -89,7 +88,7 @@ class DatabaseSeeder extends Seeder
             "mountain_group_id" => 2,
         ]);
 
-            //Beskidy Zachodnie
+        //Beskidy Zachodnie
         \App\Models\MountainRange::factory()->create([
             'name' => 'Beskid Śląski',
             "mountain_group_id" => 3,
@@ -138,7 +137,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Pogórze Rożnowskie',
             "mountain_group_id" => 3,
         ]);
-            //Beskidy Wschodnie
+        //Beskidy Wschodnie
         \App\Models\MountainRange::factory()->create([
             'name' => 'Pogórze Ciężkowickie',
             "mountain_group_id" => 4,
@@ -164,7 +163,7 @@ class DatabaseSeeder extends Seeder
             "mountain_group_id" => 4,
         ]);
 
-            //Góry Świętokrzyskie
+        //Góry Świętokrzyskie
         \App\Models\MountainRange::factory()->create([
             'name' => 'Góry Świętokrzyskie Ł01',
             "mountain_group_id" => 5,
@@ -186,7 +185,7 @@ class DatabaseSeeder extends Seeder
             "mountain_group_id" => 5,
         ]);
 
-            //Sudety
+        //Sudety
         \App\Models\MountainRange::factory()->create([
             'name' => 'Góry Izerskie',
             "mountain_group_id" => 6,
@@ -272,7 +271,7 @@ class DatabaseSeeder extends Seeder
             "mountain_group_id" => 6,
         ]);
 
-            //Słowacja
+        //Słowacja
         \App\Models\MountainRange::factory()->create([
             'name' => 'Słowacki Raj',
             "mountain_group_id" => 7,
@@ -302,11 +301,11 @@ class DatabaseSeeder extends Seeder
             "mountain_group_id" => 7,
         ]);
 
-        //-------------------------------------------------       
+        //-------------------------------------------------
         //Punkty terenowe
         //-------------------------------------------------
 
-            //TATRY WYSOKIE - T.01
+        //TATRY WYSOKIE - T.01
         \App\Models\TerrainPoint::factory()->create([
             'name' => 'Rusinowa Polana',
             "description" => '',
@@ -602,7 +601,7 @@ class DatabaseSeeder extends Seeder
             "longitude" => '19.9974457',
         ]);
 
-        //-------------------------------------------------       
+        //-------------------------------------------------
         //Odcinki górskie
         //-------------------------------------------------
         \App\Models\Section::factory()->create([
@@ -638,19 +637,58 @@ class DatabaseSeeder extends Seeder
         //-------------------------------------------------
 
         // Stworzenie siedmiu użytkowników za pomocą factory
-        $users = User::factory(7)->create();
+        User::factory(7)->create();
 
         //-------------------------------------------------
         // Tworzenie ról użytkowników i uprawnień
         //-------------------------------------------------
+        $admin = new User();
+        $admin->name = 'admin'; // $table->string('name');
+        $admin->email = 'admin@example.com'; // $table->string('email')->unique();
+        $admin->email_verified_at = Carbon::now();
+        $admin->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+        $admin->first_name = 'Random';
+        $admin->last_name = 'Admin';
+        $admin->disabled = false;
+        $admin->legitimation_number = 12345678;
+        $admin->save();
+
+        $user = new User();
+        $user->name = 'user';
+        $user->email = 'user@example.com';
+        $user->email_verified_at = Carbon::now();
+        $user->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+        $user->first_name = 'Random';
+        $user->last_name = 'User';
+        $user->disabled = false;
+        $user->save();
+
+        $leader1 = new User();
+        $leader1->name = 'leader1';
+        $leader1->email = 'leader1@example.com';
+        $leader1->email_verified_at = Carbon::now();
+        $leader1->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+        $leader1->first_name = 'Random';
+        $leader1->last_name = 'Leader1';
+        $leader1->disabled = false;
+        $leader1->legitimation_number = 987654321;
+        $leader1->save();
+
+        $leader2 = new User();
+        $leader2->name = 'leader2';
+        $leader2->email = 'leader2@example.com';
+        $leader2->email_verified_at = Carbon::now();
+        $leader2->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+        $leader2->first_name = 'Random';
+        $leader2->last_name = 'Leader2';
+        $leader2->disabled = false;
+        $leader2->legitimation_number = 456789123;
+        $leader2->save();
+
         $roles = [
-            ['name' => 'Uprawnienia - TATRY I PODTATRZE', 'tatra_podtatrze' => true,],
-            ['name' => 'Uprawnienia - TATRY SŁOWACKIE - Tatry Zachodnie, Wysokie i Bielskie', 'tatra_slowackie' => true,],
-            ['name' => 'Uprawnienia - BESKIDY ZACHODNIE', 'beskidy_zachodnie' => true,],
-            ['name' => 'Uprawnienia - BESKIDY WSCHODNIE', 'beskidy_wschodnie' => true,],
-            ['name' => 'Uprawnienia - GÓRY ŚWIĘTOKRZYSKIE', 'gory_swietokrzyskie' => true,],
-            ['name' => 'Uprawnienia - SUDETY', 'sudety' => true,],
-            ['name' => 'Uprawnienia - Słowacja', 'słowacja' => true,],
+            ['name' => 'ADMIN'],
+            ['name' => 'USER'],
+            ['name' => 'LEADER'],
         ];
 
         // Tworzenie ról
@@ -660,45 +698,42 @@ class DatabaseSeeder extends Seeder
             Role::create($roleData);
         }
 
+        // Przypisanie wszystkim użytkownikom roli usera
+        $users = User::all();
+        $role = Role::where('name', '=', 'USER')->first();
+
         // Przypisanie ról do użytkowników
-        foreach ($users as $index => $user) {
-            // Sprawdzenie, czy istnieje odpowiednia liczba ról
-            if (isset($roles[$index])) {
-                // Przypisanie do użytkownika
-                $role = Role::where('name', $roles[$index]['name'])->first();
-                $user->roles()->attach($role->id, [
-                    'created_at' => now()->toDateTimeString(),
-                    'updated_at' => now()->toDateTimeString()
-                ]);
-            }
+        foreach ($users as $user) {
+            $user->roles()->attach($role->id, [
+                'created_at' => now()->toDateTimeString(),
+                'updated_at' => now()->toDateTimeString()
+            ]);
         }
-        //---------------------------------------------------------------------------------------------------------
-         // Sprawdzanie uprawnień i przypisywanie grup górskich do użytkowników na ich podstawie
-         foreach ($users as $index => $user) {
-            $role = $roles[$index] ?? null;
-        
-            if ($role) {
-                if (isset($role['tatra_podtatrze']) && $role['tatra_podtatrze']) {
-                    $mountainGroup = MountainGroup::where('name', 'TATRY I PODTATRZE')->first();
-                } elseif (isset($role['tatra_slowackie']) && $role['tatra_slowackie']) {
-                    $mountainGroup = MountainGroup::where('name', 'TATRY SŁOWACKIE - Tatry Zachodnie, Wysokie i Bielskie')->first();
-                } elseif (isset($role['beskidy_zachodnie']) && $role['beskidy_zachodnie']) {
-                    $mountainGroup = MountainGroup::where('name', 'BESKIDY ZACHODNIE')->first();
-                } elseif (isset($role['beskidy_wschodnie']) && $role['beskidy_wschodnie']) {
-                    $mountainGroup = MountainGroup::where('name', 'BESKIDY WSCHODNIE')->first();
-                } elseif (isset($role['gory_swietokrzyskie']) && $role['gory_swietokrzyskie']) {
-                    $mountainGroup = MountainGroup::where('name', 'GÓRY ŚWIĘTOKRZYSKIE')->first();
-                } elseif (isset($role['sudety']) && $role['sudety']) {
-                    $mountainGroup = MountainGroup::where('name', 'SUDETY')->first();
-                } elseif (isset($role['słowacja']) && $role['słowacja']) {
-                    $mountainGroup = MountainGroup::where('name', 'Słowacja')->first();
-                }
-                // Dodanie warunku dla pozostałych(nowych) grup górskich
-        
-                if ($mountainGroup) {
-                    $user->usersMountainGroups()->create(['mountain_group_id' => $mountainGroup->id]);
-                }
-            }
-        }
+
+        $adminRole = Role::where('name', '=', 'ADMIN')->first();
+        $admin->roles()->attach($adminRole->id, [
+            'created_at' => now()->toDateTimeString(),
+            'updated_at' => now()->toDateTimeString()
+        ]);
+
+        $leaderRole = Role::where('name', '=', 'LEADER')->first();
+        $leader1->roles()->attach($leaderRole->id, [
+            'created_at' => now()->toDateTimeString(),
+            'updated_at' => now()->toDateTimeString()
+        ]);
+        $leader2->roles()->attach($leaderRole->id, [
+            'created_at' => now()->toDateTimeString(),
+            'updated_at' => now()->toDateTimeString()
+        ]);
+
+        // Przypisanie uprawnień przodownikom
+
+        $leader1->mountainGroups()->attach($bezkidyWschodnie, ['assignment_date' => now()]);
+        $leader1->mountainGroups()->attach($bezkidyZachodnie, ['assignment_date' => now()]);
+        $leader1->mountainGroups()->attach($sudety, ['assignment_date' => now()]);
+        $leader2->mountainGroups()->attach($gorySwietokrzyskie, ['assignment_date' => now()]);
+        $leader2->mountainGroups()->attach($tatryIpodtatrze, ['assignment_date' => now()]);
+        $leader2->mountainGroups()->attach($slowacja, ['assignment_date' => now()]);
+        $leader2->mountainGroups()->attach($tatrySlowackie, ['assignment_date' => now()]);
     }
 }
