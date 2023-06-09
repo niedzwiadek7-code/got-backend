@@ -9,7 +9,38 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function getUsersWithRole(Request $request) {
+    public function getUserWithMountainGroups(User $user)
+    {
+        $role = 'LEADER';
+        $users = User::with(['mountainGroups' => function ($query) {
+            $query->withPivot('assignment_date');
+        }])
+            ->whereHas('roles', function ($query) use ($role) {
+                $query->where('name', $role);
+            })
+            ->where('id', '=', $user->id)
+            ->get();
+
+        return response()->json($users);
+    }
+
+    public function getAllUsersWithMountainGroups()
+    {
+        $role = 'LEADER';
+        $users = User::with(['mountainGroups' => function ($query) {
+            $query->withPivot('assignment_date');
+        }])
+            ->whereHas('roles', function ($query) use ($role) {
+                $query->where('name', $role);
+            })
+            ->get();
+
+        return response()->json($users);
+    }
+
+
+    public function getUsersWithRole(Request $request)
+    {
         $role = $request->input('role');
         $users = User::whereHas('roles', function ($query) use ($role) {
             $query->where('name', $role);
@@ -18,7 +49,8 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    public function assignLeaderPermission(Request $request) {
+    public function assignLeaderPermission(Request $request)
+    {
         $mountainGroupId = $request->input('mountain_group_id');
         $userId = $request->input('user_id');
         $assignmentDate = $request->input('assignment_date');
@@ -29,9 +61,8 @@ class UserController extends Controller
         if ($mountainGroup &&
             $user &&
             $user->hasRole('LEADER') &&
-            $assignmentDate)
-        {
-            if(!$user->mountainGroups->contains($mountainGroupId)) {
+            $assignmentDate) {
+            if (!$user->mountainGroups->contains($mountainGroupId)) {
                 $user->mountainGroups()->attach($mountainGroupId, ['assignment_date' => $assignmentDate]);
                 return response()->json(['message' => 'Uprawnienie zostało przyznane przodownikowi.']);
             }
@@ -40,7 +71,8 @@ class UserController extends Controller
         }
     }
 
-    public function revokeLeaderPermission(Request $request) {
+    public function revokeLeaderPermission(Request $request)
+    {
         $mountainGroupId = $request->input('mountain_group_id');
         $userId = $request->input('user_id');
 
@@ -49,8 +81,7 @@ class UserController extends Controller
 
         if ($mountainGroup &&
             $user &&
-            $user->hasRole('LEADER'))
-        {
+            $user->hasRole('LEADER')) {
             $user->mountainGroups()->detach($mountainGroup);
             return response()->json(['message' => 'Uprawnienie zostało zabrane przodownikowi.']);
         } else {
