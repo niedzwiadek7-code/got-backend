@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,10 +37,22 @@ class AuthController extends Controller
             'legitimation_number' => $request->legitimation_number,
         ]);
 
+        $role = Role::where('name', 'USER')->first();
+        if ($role) {
+            $user->roles()->attach($role);
+        }
+
         $token = $user->createToken('authToken')->plainTextToken;
 
+        $userData = User::with('roles')->where('id', '=', $user->id)->first();
+        $roleNames = $userData->roles->pluck('name')->toArray();
+
         return response()->json([
-            'user' => $user,
+            'user' => [
+                'id' => $userData->id,
+                'name' => $userData->name,
+                'roles' => $roleNames,
+            ],
             'token' => $token
         ], 201);
     }
