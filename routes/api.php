@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+
 use App\Http\Controllers\RoleController;
 
 use App\Http\Controllers\UserController;
@@ -106,10 +107,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{badgeAward}', [BadgeAwardController::class, 'update']);
         Route::delete('/{badgeAward}', [BadgeAwardController::class, 'destroy']);
     });
-    
+
     // Role Controller endpoints
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::get('/roles', [RoleController::class, 'showRoles']);
     Route::put('/roles/{role}', [RoleController::class, 'updateRole']);
     Route::delete('/roles/{role}', [RoleController::class, 'deleteRole']);
+
+    Route::group(['prefix' => 'got-books'], function () {
+        Route::post('/', [GotBookController::class, 'createGotBook']);
+        Route::put('/map-entry', [GotBookController::class, 'mapTripPlanEntryToGotBookEntry']);
+        Route::get('/{gotBook}/entries', [GotBookController::class, 'getAllEntriesForGotBook']);
+    });
+
 });
