@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer("point_threshold")->default(0);
             $table->unsignedBigInteger("next_badge")->nullable();
             $table->unsignedBigInteger("previous_badge")->nullable();
-            $table->foreign('next_badge')->references('id')->on('badges')->onDelete('cascade');
-            $table->foreign('previous_badge')->references('id')->on('badges')->onDelete('cascade');
+            $table->foreign('next_badge')->references('id')->on('badges')->onDelete('set null');
+            $table->foreign('previous_badge')->references('id')->on('badges')->onDelete('set null');
             $table->timestamps();
         });
     }
