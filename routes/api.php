@@ -84,6 +84,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{tripPlan}', [TripPlanController::class, 'show']);
         Route::put('/{tripPlan}', [TripPlanController::class, 'update']);
         Route::delete('/{tripPlan}', [TripPlanController::class, 'destroy']);
+        Route::get('/{tripPlan}/mapped', [TripPlanController::class, 'getAllMappedEntriesForTrip']);
+        Route::get('/{tripPlan}/unmapped', [TripPlanController::class, 'getAllUnmappedEntriesForTrip']);
         Route::post('/entries', [TripPlanController::class, 'putEntry']);
         Route::delete('/entries/{tripPlanEntry}', [TripPlanController::class, 'deleteEntry']);
         Route::post('/with-entries', [TripPlanController::class, 'storeWithEntries']);
@@ -117,6 +119,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => 'got-books'], function () {
         Route::get('/', [GotBookController::class, 'getGotBook']);
         Route::post('/', [GotBookController::class, 'createGotBook']);
+        Route::get('/badge-award', [GotBookController::class, 'getLatestBadgeAward']);
         Route::put('/map-entry', [GotBookController::class, 'mapTripPlanEntryToGotBookEntry']);
         Route::get('/{gotBook}/entries', [GotBookController::class, 'getAllEntriesForGotBook']);
     });
