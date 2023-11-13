@@ -735,5 +735,51 @@ class DatabaseSeeder extends Seeder
         $leader2->mountainGroups()->attach($tatryIpodtatrze, ['assignment_date' => now()]);
         $leader2->mountainGroups()->attach($slowacja, ['assignment_date' => now()]);
         $leader2->mountainGroups()->attach($tatrySlowackie, ['assignment_date' => now()]);
+
+
+        // Tworzenie odznak
+        \App\Models\Badge::factory()->create([
+            'name' => 'W góry Brązowa',
+            'point_threshold' =>15,
+        ]);
+        \App\Models\Badge::factory()->create([
+            'name' => 'W góry Srebrna',
+            'point_threshold' =>30,
+            'previous_badge' =>1,
+        ]);
+        \App\Models\Badge::factory()->create([
+            'name' => 'W góry Złota',
+            'point_threshold' =>45,
+            'previous_badge' => 2,
+        ]);
+        \App\Models\Badge::factory()->create([
+            'name' => 'Popularna ',
+            'point_threshold' =>60,
+        ]);
+
+        \App\Models\Badge::factory()->create([
+            'name' => 'Mała Brązowa',
+            'point_threshold' =>120,
+        ]);
+        \App\Models\Badge::factory()->create([
+            'name' => 'Mała Srebrna',
+            'point_threshold' =>360,
+            'previous_badge' =>5,
+        ]);
+        \App\Models\Badge::factory()->create([
+            'name' => 'Mała Złota',
+            'point_threshold' =>720,
+            'previous_badge' => 6,
+        ]);
+        
+        \App\Models\Badge::where('name', 'W góry Brązowa')->update([
+            'next_badge' =>2]);
+        \App\Models\Badge::where('name', 'W góry Srebrna')->update([
+            'next_badge' =>3]);
+        \App\Models\Badge::where('name', 'Mała Brązowa')->update([
+            'next_badge' =>6]);
+        \App\Models\Badge::where('name', 'Mała Srebrna')->update([
+            'next_badge' =>7]);
+
     }
 }
