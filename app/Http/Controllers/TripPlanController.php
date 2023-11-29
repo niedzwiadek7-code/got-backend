@@ -16,6 +16,7 @@ class TripPlanController extends Controller
     {
         return TripPlan::query()
             ->with(['tripPlanEntries', 'tripPlanEntries.section'])
+            ->where('user_id', Auth::user()->id)
             ->get();
     }
 
