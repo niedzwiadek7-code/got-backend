@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -68,9 +67,10 @@ class User extends Authenticatable
         return $this->hasMany(TripPlan::class);
     }
 
-    public function badges(): HasMany
+    public function badgeAwards(): HasMany
     {
-        return $this->hasMany(Badge::class);
+        return $this->hasMany(BadgeAward::class)
+            ->whereYear('grant_date', now()->year);
     }
 
     public function usersMountainGroups()

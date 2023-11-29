@@ -608,8 +608,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Z Dolin Filipka do Rusinowej Polany',
             "description" => '',
             "mountain_range_id" => 1,
-            "badge_points_a_to_b" => 0,
-            "badge_points_b_to_a" => 0,
+            "badge_points_a_to_b" => 4,
+            "badge_points_b_to_a" => 5,
             "terrain_point_a_id" => 2,
             "terrain_point_b_id" => 1,
         ]);
@@ -617,8 +617,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Z Rusinowej Polany do Gęsiej Szyji',
             "description" => '',
             "mountain_range_id" => 1,
-            "badge_points_a_to_b" => 0,
-            "badge_points_b_to_a" => 0,
+            "badge_points_a_to_b" => 3,
+            "badge_points_b_to_a" => 5,
             "terrain_point_a_id" => 1,
             "terrain_point_b_id" => 7,
         ]);
@@ -626,8 +626,8 @@ class DatabaseSeeder extends Seeder
             'name' => 'Ze  Schroniska PTTK na Hali Gąsienicowej do Psiej Trawki',
             "description" => '',
             "mountain_range_id" => 1,
-            "badge_points_a_to_b" => 0,
-            "badge_points_b_to_a" => 0,
+            "badge_points_a_to_b" => 3,
+            "badge_points_b_to_a" => 5,
             "terrain_point_a_id" => 11,
             "terrain_point_b_id" => 9,
         ]);
@@ -771,7 +771,7 @@ class DatabaseSeeder extends Seeder
             'point_threshold' =>720,
             'previous_badge' => 6,
         ]);
-        
+
         \App\Models\Badge::where('name', 'W góry Brązowa')->update([
             'next_badge' =>2]);
         \App\Models\Badge::where('name', 'W góry Srebrna')->update([

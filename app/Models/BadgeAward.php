@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class BadgeAward extends Model
@@ -21,6 +22,11 @@ class BadgeAward extends Model
     public function badge(): HasOne
     {
         return $this->hasOne(Badge::class);
+    }
+
+    public function entries(): HasMany
+    {
+        return $this->hasMany(GotBookEntry::class);
     }
 
     public function tourist(): HasOne
