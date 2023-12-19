@@ -10,6 +10,7 @@ use App\Models\GotBookEntry;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BadgeAwardController extends Controller
 {
@@ -235,4 +236,16 @@ class BadgeAwardController extends Controller
             ], 400);
         }
     }
+
+    public function getBadgeAwardsForGotBook(): JsonResponse
+    {
+        $badgeAwards = BadgeAward::query()
+            ->with(['badge', 'tourist.gotBook', 'entries', 'entries.section'])
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('grant_date', 'desc')
+            ->get();
+
+        return response()->json($badgeAwards);
+    }
+
 }

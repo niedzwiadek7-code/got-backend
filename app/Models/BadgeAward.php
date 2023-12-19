@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class BadgeAward extends Model
 {
@@ -19,9 +19,9 @@ class BadgeAward extends Model
         'points_from_previous_badge',
     ];
 
-    public function badge(): HasOne
+    public function badge(): BelongsTo
     {
-        return $this->hasOne(Badge::class);
+        return $this->belongsTo(Badge::class);
     }
 
     public function entries(): HasMany
@@ -29,8 +29,8 @@ class BadgeAward extends Model
         return $this->hasMany(GotBookEntry::class);
     }
 
-    public function tourist(): HasOne
+    public function tourist(): BelongsTo
     {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 }

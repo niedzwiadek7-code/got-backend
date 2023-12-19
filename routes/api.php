@@ -106,6 +106,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['prefix' => 'badge-awards'], function () {
         Route::get('/', [BadgeAwardController::class, 'index']);
         Route::post('/', [BadgeAwardController::class, 'store']);
+        Route::get('/for-got-book', [BadgeAwardController::class, 'getBadgeAwardsForGotBook']);
         Route::get('/{badgeAward}', [BadgeAwardController::class, 'show']);
         Route::put('/{badgeAward}', [BadgeAwardController::class, 'update']);
         Route::delete('/{badgeAward}', [BadgeAwardController::class, 'destroy']);

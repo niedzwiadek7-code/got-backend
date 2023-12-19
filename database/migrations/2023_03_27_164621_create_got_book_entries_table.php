@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId("badge_award_id")->constrained();
             $table->string("status");
             $table->boolean("b_to_a");
+            $table->integer('points');
             $table->foreignId("trip_plan_entry_id")->nullable()->constrained();
             $table->unique(['badge_award_id', 'section_id', 'b_to_a']);
             $table->timestamps();
