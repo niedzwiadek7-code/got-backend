@@ -266,15 +266,14 @@ class BadgeAwardController extends Controller
                 throw new AccessDeniedException("User has no LEADER authority");
             }
 
-            $section = $gotBookEntry->section()->get();
+            $section = $gotBookEntry->section()->first();
 
-            $mountainGroupPermissionExists = MountainGroup::whereExists(function ($query) use ($section) {
-                $query->select(DB::raw(1))
-                    ->from('mountain_group_user')
-                    ->join('mountain_ranges', 'mountain_ranges.mountain_group_id', '=', 'mountain_group_user.mountain_group_id')
-                    ->where('mountain_ranges.id', '=', $section->mountain_range_id)
-                    ->where('mountain_group_user.user_id', '=', Auth::user()->id);
-            })->exists();
+            $mountainGroupPermissionExists = MountainGroup::query()
+                ->join('mountain_ranges', 'mountain_groups.id', '=', 'mountain_ranges.mountain_group_id')
+                ->join('mountain_group_user', 'mountain_groups.id', '=', 'mountain_group_user.mountain_group_id')
+                ->where('mountain_ranges.id', '=', $section->mountainRange()->first()->id)
+                ->where('mountain_group_user.user_id', '=', Auth::user()->id)
+                ->exists();
 
             if (!$mountainGroupPermissionExists) {
                 throw new AccessDeniedException("Leader has no permission in this mountain group");

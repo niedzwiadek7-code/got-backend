@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,9 +13,9 @@ class Section extends Model
 {
     use HasFactory;
 
-    public function mountainRange(): HasMany
+    public function mountainRange(): BelongsTo
     {
-        return $this->hasMany(MountainRange::class);
+        return $this->belongsTo(MountainRange::class);
     }
 
     public function terrainPointA(): HasOne
