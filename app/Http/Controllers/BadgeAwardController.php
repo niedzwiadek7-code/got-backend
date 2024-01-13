@@ -3,14 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Enums\BadgeAwardStatus;
+use App\Enums\GotBookEntryStatus;
 use App\Exceptions\GrantingBadgeException;
+use App\Exceptions\VerifyingEntryException;
 use App\Models\Badge;
 use App\Models\BadgeAward;
 use App\Models\GotBookEntry;
+use App\Models\MountainGroup;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 
 class BadgeAwardController extends Controller
 {
@@ -83,6 +88,7 @@ class BadgeAwardController extends Controller
         return response()->json(['message' => 'Badge award deleted']);
     }
 
+    // TODO Refactor to TRW verification
     public function passAwardToLeaderVerification(BadgeAward $badgeAward): JsonResponse
     {
         try {
@@ -154,6 +160,7 @@ class BadgeAwardController extends Controller
         }
     }
 
+    // TODO Refactor to TRW verification
     public function verifyAwardByLeader(BadgeAward $badgeAward): JsonResponse
     {
         try {
@@ -217,7 +224,7 @@ class BadgeAwardController extends Controller
                 $newBadgeAward->save();
             }
 
-             return response()->json([
+            return response()->json([
                 'message' => 'Badge award verified by leader',
                 'badge' => $badge,
                 'badge_award' => $badgeAward,
@@ -242,6 +249,76 @@ class BadgeAwardController extends Controller
         $badgeAwards = BadgeAward::query()
             ->with(['badge', 'tourist.gotBook', 'entries', 'entries.section'])
             ->where('user_id', Auth::user()->id)
+            ->orderBy('grant_date', 'desc')
+            ->get();
+
+        return response()->json($badgeAwards);
+    }
+
+    public function verifyBookEntryByLeader(GotBookEntry $gotBookEntry): JsonResponse
+    {
+        try {
+            $userWithRole = User::whereHas('roles', function ($query) {
+                $query->where('name', 'LEADER');
+            })->find(Auth::user()->id);
+
+            if (!$userWithRole) {
+                throw new AccessDeniedException("User has no LEADER authority");
+            }
+
+            $section = $gotBookEntry->section()->get();
+
+            $mountainGroupPermissionExists = MountainGroup::whereExists(function ($query) use ($section) {
+                $query->select(DB::raw(1))
+                    ->from('mountain_group_user')
+                    ->join('mountain_ranges', 'mountain_ranges.mountain_group_id', '=', 'mountain_group_user.mountain_group_id')
+                    ->where('mountain_ranges.id', '=', $section->mountain_range_id)
+                    ->where('mountain_group_user.user_id', '=', Auth::user()->id);
+            })->exists();
+
+            if (!$mountainGroupPermissionExists) {
+                throw new AccessDeniedException("Leader has no permission in this mountain group");
+            }
+
+            if ($gotBookEntry->status !== GotBookEntryStatus::WAITING_FOR_LEADER_VERIFICATION->name) {
+                throw new VerifyingEntryException("Wrong book entry status - should be WAITING_FOR_LEADER_VERIFICATION");
+            }
+
+            $gotBookEntry->status = GotBookEntryStatus::VERIFIED_BY_LEADER->name;
+            $gotBookEntry->save();
+
+            return response()->json([
+                'message' => 'Badge award verified by leader',
+                'entry' => $gotBookEntry,
+            ]);
+        } catch (VerifyingEntryException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'entry' => $gotBookEntry,
+            ], 400);
+        } catch (AccessDeniedException $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 403);
+        }
+    }
+
+    public function getBadgeAwardsForVerification(): JsonResponse
+    {
+        $userId = Auth::user()->id;
+        $badgeAwards = BadgeAward::query()
+            ->with(['badge', 'tourist.gotBook', 'entries', 'entries.section'])
+            ->whereExists(function ($query) use ($userId) {
+                $query->select(DB::raw(1))
+                    ->from('got_book_entries')
+                    ->join('sections as s', 'got_book_entries.section_id', '=', 's.id')
+                    ->join('mountain_ranges as mr', 's.mountain_range_id', '=', 'mr.id')
+                    ->join('mountain_group_user as mgu', 'mr.mountain_group_id', '=', 'mgu.mountain_group_id')
+                    ->join('badge_awards as ba', 'got_book_entries.badge_award_id', '=', 'ba.id')
+                    ->where('mgu.user_id', $userId)
+                    ->where('got_book_entries.status', 'WAITING_FOR_LEADER_VERIFICATION')
+                    ->whereColumn('got_book_entries.badge_award_id', 'badge_awards.id');
+            })
             ->orderBy('grant_date', 'desc')
             ->get();
 

@@ -8,7 +8,6 @@ use App\Models\BadgeAward;
 use App\Models\GotBook;
 use App\Models\GotBookEntry;
 use App\Models\Section;
-use App\Models\TripPlanEntry;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

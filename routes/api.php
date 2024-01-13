@@ -107,11 +107,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [BadgeAwardController::class, 'index']);
         Route::post('/', [BadgeAwardController::class, 'store']);
         Route::get('/for-got-book', [BadgeAwardController::class, 'getBadgeAwardsForGotBook']);
+        Route::get('/for-leader-verification', [BadgeAwardController::class, 'getBadgeAwardsForVerification']);
         Route::get('/{badgeAward}', [BadgeAwardController::class, 'show']);
         Route::put('/{badgeAward}', [BadgeAwardController::class, 'update']);
         Route::delete('/{badgeAward}', [BadgeAwardController::class, 'destroy']);
-        Route::put('/{badgeAward}/pass-to-leader', [BadgeAwardController::class, 'passAwardToLeaderVerification']);
-        Route::put('/{badgeAward}/verify-by-leader', [BadgeAwardController::class, 'verifyAwardByLeader']);
+//        Route::put('/{badgeAward}/pass-to-leader', [BadgeAwardController::class, 'passAwardToLeaderVerification']);
+//        Route::put('/{badgeAward}/verify-by-leader', [BadgeAwardController::class, 'verifyAwardByLeader']);
+        Route::put('/entry/{gotBookEntry}/verify-by-leader', [BadgeAwardController::class, 'verifyBookEntryByLeader']);
     });
 
     // Role Controller endpoints
