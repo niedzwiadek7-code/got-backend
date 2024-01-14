@@ -69,8 +69,7 @@ class User extends Authenticatable
 
     public function badgeAwards(): HasMany
     {
-        return $this->hasMany(BadgeAward::class)
-            ->whereYear('grant_date', now()->year);
+        return $this->hasMany(BadgeAward::class, 'user_id');
     }
 
     public function usersMountainGroups()

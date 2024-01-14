@@ -31,6 +31,6 @@ class BadgeAward extends Model
 
     public function tourist(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

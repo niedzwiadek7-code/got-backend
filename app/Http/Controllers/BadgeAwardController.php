@@ -306,7 +306,7 @@ class BadgeAwardController extends Controller
     {
         $userId = Auth::user()->id;
         $badgeAwards = BadgeAward::query()
-            ->with(['badge', 'tourist.gotBook', 'entries', 'entries.section'])
+            ->with(['badge', 'tourist', 'tourist.gotBook', 'entries', 'entries.section'])
             ->whereExists(function ($query) use ($userId) {
                 $query->select(DB::raw(1))
                     ->from('got_book_entries')
