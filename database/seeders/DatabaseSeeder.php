@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\MountainGroup;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -721,7 +722,7 @@ class DatabaseSeeder extends Seeder
         $admin->name = 'admin'; // $table->string('name');
         $admin->email = 'admin@example.com'; // $table->string('email')->unique();
         $admin->email_verified_at = Carbon::now();
-        $admin->password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
+        $admin->password = Hash::make('H@slo123');
         $admin->first_name = 'Random';
         $admin->last_name = 'Admin';
         $admin->disabled = false;
